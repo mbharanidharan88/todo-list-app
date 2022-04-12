@@ -1,0 +1,52 @@
+﻿@model TodoList.UI.Models.TaskListViewModel
+
+
+<div class="row">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Task Name</th>
+                <th scope="col">Task Status</th>
+                <th scope="col">Last Updated</th>
+                <th scope="col">Active?</th>
+                <th>
+                    <a class="btn btn-primary popup" data-url="Task/Upsert" data-toggle="modal" data-target="#modal-task" id="TaskModel">Add Task <i class="fa fa-plus"></i></a>
+                    <partial name="_Modal" />
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Tasks.Any())
+            {
+                @foreach (var task in Model.Tasks)
+                {
+            <tr>
+                <th scope="row">@task.Id</th>
+                <td>@task.TaskName</td>
+                <td>@task.TaskStatusStr</td>
+                <td>@task.UpdatedAt</td>
+                <td>
+                    <input type="checkbox" class="form-check-input"  asp-for="@task.IsActive" 
+                           data-url='@Url.Action("UpdateTaskActive", "Task")' 
+                           data-task-id="@task.Id" 
+                           onchange='onTaskActiveChange(this)' />
+                </td>
+                <td>
+                    <a class="btn btn-outline-secondary popup" data-url="Task/Upsert/@task.Id" data-toggle="modal" data-target="#modal-task" id="TaskModel"> <i class="fa fa-pencil-alt"></i></a>
+                    <a class="btn btn-outline-danger" 
+                       data-task-id="@task.Id" 
+                       data-url='@Url.Action("DeleteTask", "Task")'
+                       onclick="onTaskDelete(this)"> <i class="fa fa-trash-alt"></i></a>
+                </td>
+            </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script src="~/js/task.js" asp-append-version="true"></script>
+}

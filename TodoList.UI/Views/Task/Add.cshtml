@@ -1,0 +1,35 @@
+﻿@model TodoList.UI.Models.AddTaskViewModel
+
+@{
+    ViewData["Title"] = "Add Task";
+}
+
+<h1>Login</h1>
+
+<div class="row">
+    <div class="col">
+        @using (Html.BeginForm("Add", "Task", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            @if (!Html.ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    @Html.ValidationSummary()
+                </div>
+            }
+            <div class="mb-3">
+                @Html.LabelFor(m => m.Task.TaskName, "Task Name", new { @class = "form-label" })
+                @Html.TextBoxFor(m => m.Task.TaskName, null, new { @class = "form-control" })
+            </div>
+            <div>
+                @Html.HiddenFor(m => m.ReturnUrl)
+                <button type="submit" class="btn btn-primary">Add Task</button>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

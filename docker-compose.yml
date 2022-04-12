@@ -1,0 +1,33 @@
+--- 
+services: 
+    app_backend:
+        container_name: app_backend
+        build:
+            context: .
+            dockerfile: TodoList.API/Dockerfile
+        ports:
+            - 6000:6000
+            - 6001:6001
+
+    app_identity:
+        container_name: app_identity
+        build: 
+            context: .
+            dockerfile: TodoList.Identity.Service/Dockerfile
+        ports: 
+            - 5000:5000
+            - 5001:5001
+
+    app_frontend:
+        container_name: app_frontend
+        build:
+            context: .
+            dockerfile: TodoList.UI/Dockerfile
+        ports:
+            - 7000:7000
+            - 7001:7001
+        depends_on: 
+            - app_backend
+            - app_identity
+
+version: "3.4"
